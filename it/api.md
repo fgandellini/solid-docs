@@ -50,22 +50,22 @@ export function createEffect<T>(
 ): void;
 ```
 
-Questo creerà un nuovo calcolo che tiene traccia automaticamente delle dipendenze. Viene eseguito dopo ogni rendering in cui è cambiata una dipendenza. È ideale per l'utilizzo di `ref`s e la gestione di altri effetti collaterali.
+Questa funzione traccia automaticamente le dipendenze viene eseguita dopo ogni render nel quale le dipendenze sono cambiate. E' ideale per essere usata con `ref` e per la gestione di altri side effects.
 
 ```js
-const [a, assegnaA] = createSignal(valorePredefinito);
+const [a, setA] = createSignal(initialValue);
 
-// effetto che dipende dal segnale `a`
-createEffect(() => altroAffetto(a()));
+// crea un effetto che dipende dal signal `a`
+createEffect(() => doSideEffect(a()));
 ```
 
-La funzione effetto viene chiamata con il valore restituito dall'ultima esecuzione della funzione effetto. Questo valore può essere inizializzato come secondo argomento opzionale. Questo può essere utile per differenziare senza creare una chiusura aggiuntiva.
+La funzione passata a `createEffect` riceve come argomento il valore restituito dalla precedente esecuzione. Questo valore può essere inizializzato passando un secondo argomento (opzionale) a `createEffect`. Questo approccio è utile per effettuare confronti senza utilizzare una closure aggiuntiva.
 
 ```js
 createEffect((prev) => {
-  const somma = a() + b();
-  if (somma !== prev) console.log(somma);
-  return somma;
+  const sum = a() + b();
+  if (sum !== prev) console.log(sum);
+  return sum;
 }, 0);
 ```
 
