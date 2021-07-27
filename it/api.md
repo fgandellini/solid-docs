@@ -4,7 +4,7 @@ description: Schema di tutte le API Solid.
 sort: 0
 ---
 
-# Reattività semplice
+# Reattività di base
 
 ## `createSignal`
 
@@ -15,27 +15,29 @@ export function createSignal<T>(
 ): [get: () => T, set: (v: T) => T];
 ```
 
-La primitiva reattiva più elementare utilizzata per tracciare un singolo valore che cambia nel tempo è createSignal. La funzione create restituisce una coppia di funzioni get e set per accedere e aggiornare il segnale.
+Questa è la primitiva di base per la gestione della reattività. Viene usata per tracciare il cambiamento di un singolo valore nel tempo. Questo valore è chiamato _signal_.
+
+La funzione restituisce una coppia di funzioni per la gestione del signal: un _getter_ per la lettura ed un _setter_ per la scrittura.
 
 ```js
-const [leggereValore, assegnaValore] = createSignal(valorePredefinito);
+const [getValue, setValue] = createSignal(initialValue);
 
-// assegna il valore con un setter di funzioni
-leggereValore();
+// legge il valore
+getValue();
 
-// assegna il valore con un setter di funzioni
-assegnaValore(valoreSuccessivo);
+// aggiorna il valore
+setValue(nextValue);
 
-// assegna il valore con un setter di funzioni
-assegnaValore((assegnaValore) => assegnaValore + successivo);
+// aggiorna il valore usando una funzione
+setValue((prev) => prev + next);
 ```
 
-Remember to access signals under a tracking scope if you wish them to react to updates. Tracking scopes are functions that are passed to computations like `createEffect` or JSX expressions.
+Ricordati di accedere al signal attraverso un _tracking scope_ se vuoi che questi reagiscano agli aggiornamenti. I tracking scopes sono funzioni che vengono passate ad altre funzioni come `createEffect` o espressioni JSX.
 
-> Per memorizzare una funzione in un segnale utilizzerai il modulo funzione:
+> Se vuoi salvare una funzione in un signal, devi usare la versione di setValue che accetta una funzione
 >
 > ```js
-> assegnaValore(() => ilFunzione);
+> setValue(() => myFunction);
 > ```
 
 ## `createEffect`
